@@ -8,16 +8,22 @@
 
 import Foundation
 
-class TemporaryTargetData: NSObject, NSCoding, Codable {
+class TemporaryTargetData: NSObject, Codable, NSSecureCoding {
     
     var targetTop : Int = 100
     var targetBottom : Int = 100
     var activeUntilDate : Date = Date()
+    var lastUpdate : Date?
+    
+    static var supportsSecureCoding: Bool {
+        return true
+    }
     
     enum CodingKeys: String, CodingKey {
         case targetTop
         case targetBottom
         case activeUntilDate
+        case lastUpdate
     }
     
     override init() { super.init() }
@@ -29,7 +35,18 @@ class TemporaryTargetData: NSObject, NSCoding, Codable {
         self.activeUntilDate = activeUntilDate
     }
 
-    // MARK:- NSCoding interface implementation
+    // true if no refresh is need. This is the case, if the last update has been before 5 minutes or less.
+    public func isUpToDate() -> Bool {
+        
+        guard let lastUpdate = lastUpdate else {
+            return false
+        }
+        // Calculate the time interval between the current date and the provided date
+        let timeInterval = Date().timeIntervalSince(lastUpdate)
+
+        // Check if the time interval is less than 5 minutes (300 seconds)
+        return timeInterval < 300
+    }
     
     /*
         Code to deserialize BgData content. The error handling is needed in case that old serialized
@@ -44,6 +61,10 @@ class TemporaryTargetData: NSObject, NSCoding, Codable {
         if let activeUntilDate = decoder.decodeObject(forKey: "activeUntilDate") as? Date {
             self.activeUntilDate = activeUntilDate
         }
+        
+        if let lastUpdate = decoder.decodeObject(forKey: "lastUpdate") as? Date {
+            self.lastUpdate = lastUpdate
+        }
     }
     
     /*
@@ -53,6 +74,7 @@ class TemporaryTargetData: NSObject, NSCoding, Codable {
         aCoder.encode(self.targetTop, forKey: "targetTop")
         aCoder.encode(self.targetBottom, forKey: "targetBottom")
         aCoder.encode(self.activeUntilDate, forKey: "activeUntilDate")
+        aCoder.encode(self.lastUpdate, forKey: "lastUpdate")
     }
     
     
@@ -69,6 +91,7 @@ class TemporaryTargetData: NSObject, NSCoding, Codable {
         self.targetTop = try container.decode(Int.self, forKey: .targetTop)
         self.targetBottom = try container.decode(Int.self, forKey: .targetBottom)
         self.activeUntilDate = try container.decode(Date.self, forKey: .activeUntilDate)
+        self.lastUpdate = try container.decode(Date.self, forKey: .lastUpdate)
     }
     
     /// Encodes this value into the given encoder.
@@ -85,5 +108,6 @@ class TemporaryTargetData: NSObject, NSCoding, Codable {
         try container.encode(self.targetTop, forKey: .targetTop)
         try container.encode(self.targetBottom, forKey: .targetBottom)
         try container.encode(self.activeUntilDate, forKey: .activeUntilDate)
+        try container.encode(self.lastUpdate, forKey: .lastUpdate)
     }
 }

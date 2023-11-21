@@ -47,8 +47,8 @@ class NightscoutDataRepository {
         let defaults = UserDefaults(suiteName: AppConstants.APP_GROUP_ID)
         NSKeyedArchiver.setClassName("NightscoutData", for: NightscoutData.self)
         try?
-            defaults!.set(
-                NSKeyedArchiver.archivedData(withRootObject: bgData, requiringSecureCoding: false),
+            defaults?.set(
+                NSKeyedArchiver.archivedData(withRootObject: bgData, requiringSecureCoding: true),
                 forKey: Constants.currentBgData)
         
         if #available(iOS 14.0, *), #available(watchOS 9.0, *){
@@ -69,6 +69,7 @@ class NightscoutDataRepository {
         }
         
         NSKeyedUnarchiver.setClass(NightscoutData.self, forClassName: "NightscoutData")
+        //guard let nightscoutData = (try? NSKeyedUnarchiver.unarchivedObject(ofClass: NightscoutData.self, from: data)) else {
         guard let nightscoutData = (try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data)) as? NightscoutData else {
             return NightscoutData()
         }
@@ -106,7 +107,7 @@ class NightscoutDataRepository {
     
     func storeYesterdaysDayOfTheYear(yesterdaysDayOfTheYear : Int) {
         let defaults = UserDefaults(suiteName: AppConstants.APP_GROUP_ID)
-        defaults!.set(yesterdaysDayOfTheYear, forKey: Constants.yesterdaysDayOfTheYear)
+        defaults?.set(yesterdaysDayOfTheYear, forKey: Constants.yesterdaysDayOfTheYear)
     }
     
     func loadCannulaChangeTime() -> Date {
@@ -123,7 +124,7 @@ class NightscoutDataRepository {
     
     func storeCannulaChangeTime(cannulaChangeTime : Date) {
         let defaults = UserDefaults(suiteName: AppConstants.APP_GROUP_ID)
-        defaults!.set(cannulaChangeTime, forKey: Constants.cannulaChangeTime)
+        defaults?.set(cannulaChangeTime, forKey: Constants.cannulaChangeTime)
     }
     
     func loadSensorChangeTime() -> Date {
@@ -140,7 +141,7 @@ class NightscoutDataRepository {
     
     func storeSensorChangeTime(sensorChangeTime : Date) {
         let defaults = UserDefaults(suiteName: AppConstants.APP_GROUP_ID)
-        defaults!.set(sensorChangeTime, forKey: Constants.sensorChangeTime)
+        defaults?.set(sensorChangeTime, forKey: Constants.sensorChangeTime)
     }
     
     func loadBatteryChangeTime() -> Date {
@@ -157,14 +158,14 @@ class NightscoutDataRepository {
     
     func storeBatteryChangeTime(batteryChangeTime : Date) {
         let defaults = UserDefaults(suiteName: AppConstants.APP_GROUP_ID)
-        defaults!.set(batteryChangeTime, forKey: Constants.batteryChangeTime)
+        defaults?.set(batteryChangeTime, forKey: Constants.batteryChangeTime)
     }
     
     func storeDeviceStatusData(deviceStatusData : DeviceStatusData) {
         
         let defaults = UserDefaults(suiteName: AppConstants.APP_GROUP_ID)
         NSKeyedArchiver.setClassName("DeviceStatusData", for: DeviceStatusData.self)
-        defaults!.set(try? NSKeyedArchiver.archivedData(withRootObject: deviceStatusData, requiringSecureCoding: false), forKey: Constants.deviceStatus)
+        defaults?.set(try? NSKeyedArchiver.archivedData(withRootObject: deviceStatusData, requiringSecureCoding: true), forKey: Constants.deviceStatus)
     }
     
     func loadDeviceStatusData() -> DeviceStatusData {
@@ -179,6 +180,7 @@ class NightscoutDataRepository {
         }
         
         NSKeyedUnarchiver.setClass(DeviceStatusData.self, forClassName: "DeviceStatusData")
+        //guard let deviceStatusData = (try? NSKeyedUnarchiver.unarchivedObject(ofClass: DeviceStatusData.self, from: data)) else {
         guard let deviceStatusData = (try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data)) as? DeviceStatusData else {
             return DeviceStatusData()
         }
@@ -189,7 +191,7 @@ class NightscoutDataRepository {
         
         let defaults = UserDefaults(suiteName: AppConstants.APP_GROUP_ID)
         NSKeyedArchiver.setClassName("TemporaryTargetData", for: TemporaryTargetData.self)
-        defaults!.set(try? NSKeyedArchiver.archivedData(withRootObject: temporaryTargetData, requiringSecureCoding: false), forKey: Constants.temporaryTarget)
+        defaults?.set(try? NSKeyedArchiver.archivedData(withRootObject: temporaryTargetData, requiringSecureCoding: true), forKey: Constants.temporaryTarget)
     }
     
     func loadTemporaryTargetData() -> TemporaryTargetData {
@@ -204,6 +206,7 @@ class NightscoutDataRepository {
         }
         
         NSKeyedUnarchiver.setClass(TemporaryTargetData.self, forClassName: "TemporaryTargetData")
+//        guard let temporaryTargetData = (try? NSKeyedUnarchiver.unarchivedObject(ofClass: TemporaryTargetData.self, from: data)) else {
         guard let temporaryTargetData = (try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data)) as? TemporaryTargetData else {
             return TemporaryTargetData()
         }
@@ -215,8 +218,8 @@ class NightscoutDataRepository {
         print("Storing \(bgData.count) using key \(keyName)")
         
         let defaults = UserDefaults(suiteName: AppConstants.APP_GROUP_ID)
-        defaults!.set(
-            try? NSKeyedArchiver.archivedData(withRootObject: bgData, requiringSecureCoding: false),
+        defaults?.set(
+            try? NSKeyedArchiver.archivedData(withRootObject: bgData, requiringSecureCoding: true),
             forKey: keyName)
     }
     
@@ -231,7 +234,7 @@ class NightscoutDataRepository {
             return []
         }
         
-        guard let bgData = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as? [BloodSugar] else {
+        guard let bgData = try? NSKeyedUnarchiver.unarchivedArrayOfObjects(ofClass: BloodSugar.self, from: data) else {
             return []
         }
         return bgData

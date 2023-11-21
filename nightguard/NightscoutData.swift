@@ -10,9 +10,9 @@ import Foundation
 
 // Contains all available information of a current Blood Glucose value.
 // This data can be stored in the user defaults.
-class NightscoutData : NSObject, NSCoding, Codable {
+class NightscoutData : NSObject, Codable, NSSecureCoding {
     
-    var sgv : String = "--1"
+    var sgv : String = "---"
     // the delta Value in Display Units
     var bgdeltaString : String = "---"
     var bgdeltaArrow : String = "-"
@@ -57,6 +57,10 @@ class NightscoutData : NSObject, NSCoding, Codable {
         super.init()
     }
     
+    static var supportsSecureCoding: Bool {
+        return true
+    }
+    
     enum CodingKeys: String, CodingKey {
         case sgv
         case bgdeltaString
@@ -69,9 +73,6 @@ class NightscoutData : NSObject, NSCoding, Codable {
         case rawbg
         case noise
     }
-
-    
-    // MARK:- NSCoding interface implementation
     
     /* 
         Code to deserialize BgData content. The error handling is needed in case that old serialized

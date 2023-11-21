@@ -162,8 +162,8 @@ class UserDefaultsRepository {
         if (token != nil) {
             urlComponents.queryItems?.append(URLQueryItem(name: "token", value: String(describing: token!)))
         }
-        print(urlComponents.url!)
-        return urlComponents.url!
+        print(urlComponents.url ?? "")
+        return urlComponents.url
     }
     
     static let temporaryTargetReason = UserDefaultsValue<String>(key: "temporaryTargetReason", default: (UserDefaults(suiteName: AppConstants.APP_GROUP_ID)?.object(forKey: "temporaryTargeReasont") as? String) ?? "Too Low")

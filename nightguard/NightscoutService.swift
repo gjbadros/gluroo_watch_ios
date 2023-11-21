@@ -55,7 +55,7 @@ class NightscoutService {
                     return
                 }
                 
-                let jsonArray : [String:Any] = try!JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers) as! [String:Any]
+                let jsonArray : [String:Any] = try!JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers) as! [String : Any]
                 var sgvValues = [Int]()
                 for (key, value) in jsonArray {
                     if key == "sqv" {
@@ -673,7 +673,12 @@ class NightscoutService {
             return
         }
         
-        let request = URLRequest(url: url!, cachePolicy: URLRequest.CachePolicy.reloadIgnoringLocalCacheData, timeoutInterval: 20)
+        var request = URLRequest(url: url!, cachePolicy: URLRequest.CachePolicy.reloadIgnoringLocalCacheData, timeoutInterval: 20)
+        // Setting an empty body - otherwise the GET Request can lead to crazy
+        // Results, because Apple is complaining about a body request isn`t allowed
+        // during get requests:
+        request.httpBody = nil
+        request.addValue("0", forHTTPHeaderField: "Content-Length")
         
         let session = URLSession.shared
         let task = session.dataTask(with: request, completionHandler: { data, response, error in
