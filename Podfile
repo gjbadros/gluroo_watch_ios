@@ -35,12 +35,12 @@ target 'nightguard WatchKit App' do
 
 end
 
-target 'nightguard Widget Extension' do
-  platform :watchos, '4.3'
+# target 'nightguard Widget Extension' do
+#   platform :watchos, '4.3'
 
-  # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
-  use_frameworks!
+#   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
+#   use_frameworks!
 
-  # Pods for nightguard WatchKit Extension
+#   # Pods for nightguard WatchKit Extension
 
-end
+# end
