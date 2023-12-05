@@ -1,0 +1,12 @@
+diff --git a/cocoapods-patch-20231205-11774-er45fu/Eureka/Source/Rows/SliderRow.swift b/Pods/Eureka/Source/Rows/SliderRow.swift
+index 5a8c94d..6c56560 100644
+--- a/cocoapods-patch-20231205-11774-er45fu/Eureka/Source/Rows/SliderRow.swift
++++ b/Pods/Eureka/Source/Rows/SliderRow.swift
+@@ -169,6 +169,7 @@ public final class SliderRow: Row<SliderCell>, RowType {
+ 
+     public var steps: UInt = 20
+     public var shouldHideValue = false
++    public var lastSelectedValue: Float?
+ 
+     required public init(tag: String?) {
+         super.init(tag: tag)

@@ -1,6 +1,8 @@
 # Uncomment the next line to define a global platform for your project
 # platform :ios, '9.0'
 
+plugin 'cocoapods-patch'
+
 target 'nightguard' do
   platform :ios, '12.4'
 
